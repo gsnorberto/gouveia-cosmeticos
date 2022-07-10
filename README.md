@@ -14,3 +14,10 @@ sanity init --coupon javascriptmastery2022
 sanity docs
 sanity manage
 sanity start
+
+### RUN PROJECT
+inside gouveia-cosmeticos:
+    npm run dev
+
+inside sanity_gouveia-cosmeticos:
+    sanity manage
