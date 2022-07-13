@@ -2,7 +2,9 @@ import React from 'react'
 
 import { Product, FooterBanner, HeroBanner } from '../components'
 
-const home = () => {
+import { client } from '../lib/client'
+
+const home = ({ products, bannerData }) => {
     return (
         <>
             <HeroBanner />
@@ -14,12 +16,22 @@ const home = () => {
 
             {/* Products for sale */}
             <div className='products-container'>
-                {['Produto 1 ', 'Produto 2 ', 'Produto 3 '].map(product => product)}
+                {products?.map(product => product.name)}
             </div>
 
             <FooterBanner />
         </>
     )
+}
+
+export const getServerSideProps = async () => {
+    const query = '*[_type == "product"]' // all products from sanity
+    const products = await client.fetch(query);
+
+    const bannerQuery = '*[_type == "banner"]' // all data from banner
+    const bannerData = await client.fetch(bannerQuery);
+
+    return { products, bannerData };
 }
 
 export default home
