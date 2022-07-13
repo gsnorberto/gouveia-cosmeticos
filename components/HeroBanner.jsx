@@ -1,23 +1,25 @@
 import React from 'react'
 import Link from 'next/link'
 
-const HeroBanner = () => {
+import { urlFor } from '../lib/client'
+
+const HeroBanner = ({ props }) => {
     return (
         <div className="hero-banner-container">
             <div>
-                <p className="cosmetic-products"> SMALL TEXT </p>
+                <p className="cosmetic-products">{props.smallText}</p>
+                <h3>{props.midText}</h3>
+                <h1>{props.largeText1}</h1>
 
-                <h3>MID TEXT</h3>
-
-                <img src="" alt="Banner Goveia Cosméticos" className="hero-banner-image" />
+                <img src={urlFor(props.image)} alt="Banner Goveia Cosméticos" className="hero-banner-image" />
 
                 <div>
-                    <Link href="/product/ID">
-                        <button>BUTTON TEXT</button>
+                    <Link href={`/product/${props.product}`}>
+                        <button>{props.buttonText}</button>
                     </Link>
                     <div className="desc">
                         <h5>Description</h5>
-                        <p>DESCRIPTION</p>
+                        <p>{props.desc}</p>
                     </div>
                 </div>
             </div>
@@ -25,4 +27,4 @@ const HeroBanner = () => {
     )
 }
 
-export default HeroBanner
+export default HeroBanner;

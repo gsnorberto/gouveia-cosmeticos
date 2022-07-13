@@ -4,10 +4,11 @@ import { Product, FooterBanner, HeroBanner } from '../components'
 
 import { client } from '../lib/client'
 
-const home = ({ products, bannerData }) => {
+const home = ({products, bannerData}) => {
+
     return (
         <>
-            <HeroBanner />
+            <HeroBanner props={bannerData.length && bannerData[0]}/>
 
             <div className='products-heading'>
                 <h2>Mais vendidos</h2>
@@ -31,7 +32,11 @@ export const getServerSideProps = async () => {
     const bannerQuery = '*[_type == "banner"]' // all data from banner
     const bannerData = await client.fetch(bannerQuery);
 
-    return { products, bannerData };
+    return {
+        props: {
+            products, bannerData
+        }  
+    };
 }
 
 export default home
