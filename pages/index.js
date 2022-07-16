@@ -4,7 +4,7 @@ import { Product, FooterBanner, HeroBanner } from '../components'
 
 import { client } from '../lib/client'
 
-const home = ({products, bannerData}) => {
+const home = ({ products, bannerData }) => {
 
     return (
         <>
