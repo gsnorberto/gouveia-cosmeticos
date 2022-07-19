@@ -4,28 +4,31 @@ import { AiOutlineMinus, AiOutlinePlus, AiFillStar, AiOutlineStar } from 'react-
 import { client, urlFor } from '../../lib/client';
 
 import { Product } from '../../components';
+import { useStateContext } from '../../context/StateContext';
 
 const ProductDetails = ({ product, products }) => {
     const { image, name, details, price } = product;
-
     const [index, setIndex] = useState(0);
+    const { decQty, incQty, qty } = useStateContext();
     
     return (
         
         <div>
             <div className='product-detail-container'>
                 <div>
+                    {/* main product image */}
                     <div className="image-container">
-                        <img src={urlFor(image && image[index])} alt="" />
+                        <img src={urlFor(image && image[index])} alt="" className='product-detail-image'/>
                     </div>
+                    {/* small product images */}
                     <div className="small-images-container">
-                        {image?.map((item, i) => {
+                        {image?.map((item, i) => (
                             <img 
                                 src={urlFor(item)}
-                                className={ i === index ? 'small-image selected-image' : 'small-image'}
+                                className={i === index ? 'small-image selected-image' : 'small-image'}
                                 onMouseEnter={() => setIndex(i)}
                             />
-                        })}
+                        ))}
                     </div>
                 </div>
 
@@ -49,13 +52,13 @@ const ProductDetails = ({ product, products }) => {
                     <div className="quantity">
                         <h3>Quantidade:</h3>
                         <p className="quantity-desc">
-                            <span className='minus' onClick="">
+                            <span className='minus' onClick={decQty}>
                                 <AiOutlineMinus />
                             </span>
                             <span className='num' onClick="">
-                                0
+                                {qty}
                             </span>
-                            <span className='plus' onClick="">
+                            <span className='plus' onClick={incQty}>
                                 <AiOutlinePlus />
                             </span>
                         </p>
