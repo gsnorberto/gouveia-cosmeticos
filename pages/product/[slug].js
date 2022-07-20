@@ -9,7 +9,7 @@ import { useStateContext } from '../../context/StateContext';
 const ProductDetails = ({ product, products }) => {
     const { image, name, details, price } = product;
     const [index, setIndex] = useState(0);
-    const { decQty, incQty, qty } = useStateContext();
+    const { decQty, incQty, qty, onAdd } = useStateContext();
     
     return (
         
@@ -51,7 +51,7 @@ const ProductDetails = ({ product, products }) => {
                     <p className="price">{price}</p>
                     <div className="quantity">
                         <h3>Quantidade:</h3>
-                        <p className="quantity-desc">
+                    <p className="quantity-desc">
                             <span className='minus' onClick={decQty}>
                                 <AiOutlineMinus />
                             </span>
@@ -64,7 +64,7 @@ const ProductDetails = ({ product, products }) => {
                         </p>
                     </div>
                     <div className='buttons'>
-                        <button type='button' className='add-to-cart' onClick=''>Adicionar ao Carrinho</button>
+                        <button type='button' className='add-to-cart' onClick={() => onAdd(product, qty)}>Adicionar ao Carrinho</button>
                         <button type='button' className='buy-now' onClick=''>Compre agora</button>
                     </div>
                 </div>
