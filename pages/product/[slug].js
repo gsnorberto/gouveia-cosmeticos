@@ -10,20 +10,20 @@ const ProductDetails = ({ product, products }) => {
     const { image, name, details, price } = product;
     const [index, setIndex] = useState(0);
     const { decQty, incQty, qty, onAdd } = useStateContext();
-    
+
     return (
-        
+
         <div>
             <div className='product-detail-container'>
                 <div>
                     {/* main product image */}
                     <div className="image-container">
-                        <img src={urlFor(image && image[index])} alt="" className='product-detail-image'/>
+                        <img src={urlFor(image && image[index])} alt="" className='product-detail-image' />
                     </div>
                     {/* small product images */}
                     <div className="small-images-container">
                         {image?.map((item, i) => (
-                            <img 
+                            <img
                                 src={urlFor(item)}
                                 className={i === index ? 'small-image selected-image' : 'small-image'}
                                 onMouseEnter={() => setIndex(i)}
@@ -51,7 +51,7 @@ const ProductDetails = ({ product, products }) => {
                     <p className="price">{price}</p>
                     <div className="quantity">
                         <h3>Quantidade:</h3>
-                    <p className="quantity-desc">
+                        <p className="quantity-desc">
                             <span className='minus' onClick={decQty}>
                                 <AiOutlineMinus />
                             </span>
@@ -69,14 +69,14 @@ const ProductDetails = ({ product, products }) => {
                     </div>
                 </div>
             </div>
-            
-            {/* SIMILAR PRODUCTS */} 
+
+            {/* SIMILAR PRODUCTS */}
             <div className='maylike-products-wrapper'>
                 <h2>Você também pode gostar de: </h2>
                 <div className='marquee'>
                     <div className="maylike-products-container track">
                         {products.map((product) => (
-                            <Product 
+                            <Product
                                 key={product._id}
                                 product={product}
                             />

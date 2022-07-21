@@ -6,10 +6,14 @@ const Context = createContext();
 export const StateContext = ({ children }) => {
     const [showCart, setShowCart] = useState(false);
     const [cartItems, setCartItems] = useState([]);
-    const [totalPrice, setTotalPrice] = useState();
+    const [totalPrice, setTotalPrice] = useState(0);
     const [totalQuantities, setTotalQuantities] = useState(0);
     const [qty, setQty] = useState(1); //Quantity
 
+    let foundProduct;
+    let index;
+
+    // Add product to cart
     const onAdd = (product, quantity) => {
         // check if the product already exists in the cart
         const checkProductInCart = cartItems.find((item) => item._id === product._id);
@@ -31,17 +35,44 @@ export const StateContext = ({ children }) => {
 
         } else {
             product.quantity = quantity;
-            setCartItems([...cartItems, {...product}])
+            setCartItems([...cartItems, { ...product }])
         }
 
         toast.success(`${qty}${product.name} added to the cart`);
     }
 
+    // increase and decrease the quantity of product directly from the cart
+    const toggleCartItemQuantity = (id, value) => {
+        foundProduct = cartItems.find((item) => item._id === id);
+        index = cartItems.findIndex((product) => product._id === id);
+
+        if (value === 'inc') { //increase the quantity of product
+            setCartItems([
+                ...cartItems,
+                { ...foundProduct, quantity: foundProduct.quantity + 1 }
+            ]);
+            setTotalPrice((prevTotalPrice) => prevTotalPrice + foundProduct.price);
+            setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + 1);
+        } else if (value === 'dec') { //decrease the quantity of product
+            if (foundProduct.quantity > 1) {
+                setCartItems([
+                    ...cartItems,
+                    { ...foundProduct, quantity: foundProduct.quantity - 1 }
+                ]);
+                setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price);
+                setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - 1);
+            }
+
+        }
+    }
+
+    // increase the quantity of the product
     const incQty = () => {
         setQty((prevQty) => prevQty + 1);
         //setQty(qty + 1)
     }
 
+    // decrease the quantity of the product
     const decQty = () => {
         setQty((prevQty) => {
             if (prevQty - 1 < 1) return 1;
@@ -61,7 +92,8 @@ export const StateContext = ({ children }) => {
                 qty,
                 incQty,
                 decQty,
-                onAdd
+                onAdd,
+                toggleCartItemQuantity
             }}
         >
             {children}
