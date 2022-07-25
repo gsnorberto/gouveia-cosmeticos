@@ -43,26 +43,38 @@ export const StateContext = ({ children }) => {
 
     // increase and decrease the quantity of product directly from the cart
     const toggleCartItemQuantity = (id, value) => {
+        
         foundProduct = cartItems.find((item) => item._id === id);
         index = cartItems.findIndex((product) => product._id === id);
 
+        //const newCartItems = cartItems.filter((cartProduct) => cartProduct._id !== id) // remove item 
+
+        const newCartItems = cartItems;
+        
+
         if (value === 'inc') { //increase the quantity of product
+            newCartItems[index].quantity += 1;
             setCartItems([
-                ...cartItems,
-                { ...foundProduct, quantity: foundProduct.quantity + 1 }
+                ...newCartItems
+                //{ ...foundProduct, quantity: foundProduct.quantity + 1 }
             ]);
+
             setTotalPrice((prevTotalPrice) => prevTotalPrice + foundProduct.price);
             setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + 1);
+
         } else if (value === 'dec') { //decrease the quantity of product
+            
             if (foundProduct.quantity > 1) {
+                newCartItems[index].quantity -= 1;
                 setCartItems([
-                    ...cartItems,
-                    { ...foundProduct, quantity: foundProduct.quantity - 1 }
+                    ...newCartItems
+                    //{ ...foundProduct, quantity: foundProduct.quantity - 1 }
                 ]);
+                
                 setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price);
+
                 setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - 1);
             }
-
         }
     }
 

@@ -8,7 +8,7 @@ import { urlFor } from '../lib/client';
 
 const Cart = () => {
     const cartRef = useRef();
-    const { totalPrice, totalQuantities, cartItems, setShowCart } = useStateContext();
+    const { totalPrice, totalQuantities, cartItems, setShowCart, toggleCartItemQuantity } = useStateContext();
 
     return (
         <div className="cart-wrapper" ref={cartRef}>
@@ -52,17 +52,19 @@ const Cart = () => {
                                 {/* Title and price */}
                                 <div className="flex top">
                                     <h5>{item.name}</h5>
-                                    <h4>${item.price}</h4>
+                                    <h4>R${item.price}</h4>
                                 </div>
                                 {/* Buttons */}
                                 <div className="flex bottom">
                                     <div>
                                         <p className="quantity-desc">
-                                            <span className='minus' onClick="">
+                                            <span className='minus' onClick={() => toggleCartItemQuantity(item._id, 'dec')}>
                                                 <AiOutlineMinus />
                                             </span>
-                                            <span className='num' onClick=""> 0 </span>
-                                            <span className='plus' onClick="">
+                                            <span className='num' onClick="">
+                                                {item.quantity}
+                                            </span>
+                                            <span className='plus' onClick={() => toggleCartItemQuantity(item._id, 'inc')}>
                                                 <AiOutlinePlus />
                                             </span>
                                         </p>
@@ -86,7 +88,7 @@ const Cart = () => {
                     <div className="cart-botton">
                         <div className="total">
                             <h3>Subtotal</h3>
-                            <h3>${totalPrice}</h3>
+                            <h3>R${totalPrice}</h3>
                         </div>
                         <div className="btn-container">
                             <button type='button' className='btn' onClick="">
