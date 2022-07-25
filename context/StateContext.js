@@ -41,6 +41,17 @@ export const StateContext = ({ children }) => {
         toast.success(`${qty}${product.name} added to the cart`);
     }
 
+    // Remove product from cart
+    const onRemove = (product) => {
+        foundProduct = cartItems.find((item) => item._id === product._id);
+
+        const newCartItems = cartItems.filter((cartProduct) => cartProduct._id !== product._id); // remove item
+
+        setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price * foundProduct.quantity);
+        setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - foundProduct.quantity);
+        setCartItems(newCartItems);
+    }
+
     // increase and decrease the quantity of product directly from the cart
     const toggleCartItemQuantity = (id, value) => {
         
@@ -105,7 +116,8 @@ export const StateContext = ({ children }) => {
                 incQty,
                 decQty,
                 onAdd,
-                toggleCartItemQuantity
+                toggleCartItemQuantity,
+                onRemove
             }}
         >
             {children}
