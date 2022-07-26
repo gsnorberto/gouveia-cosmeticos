@@ -24,14 +24,12 @@ export const StateContext = ({ children }) => {
 
         // If product is already in the cart, just increase its quantity
         if (checkProductInCart) {
-            const updatedCartItems = cartItems.map((cartProduct) => {
-                // search for corresponding product in cart, copy your dataset and update quantity only
-                if (cartProduct._id === product._id) return {
-                    ...cartProduct,
-                    quantity: cartProduct.quantity + quantity
-                }
-            })
-            setCartItems(updatedCartItems);
+            const productIndex = cartItems.findIndex((cartProduct) => cartProduct._id === product._id);
+
+            const newCartItems = cartItems;
+            newCartItems[productIndex].quantity += quantity;
+
+            setCartItems([...newCartItems])
 
         } else {
             product.quantity = quantity;
