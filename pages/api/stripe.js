@@ -1,11 +1,13 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY) ;
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
         const params = {
             submit_type: 'pay',
-            mode: 'Payment',
+            mode: 'payment',
             payment_method_types: ['card'],
             billing_address_collection: 'auto',
             shipping_options: [
@@ -13,14 +15,31 @@ export default async function handler(req, res) {
                 {shipping_rate: 'shr_1LPtu0BeTd2p1bHQFo5sUu1m'}
             ],
 
-            line_items: [
-              {
-                // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                price: '{{PRICE_ID}}',
-                quantity: 1,
-              },
-            ],
-            mode: 'payment',
+            line_items: req.body.map((item) => {
+              const img = item.image[0].asset._ref;
+              const newImage = img
+                .replace('image-', 'https://cdn.sanity.io/images/fhsjxofj/production/')
+                .replace('-webp', '.webp') //replace only if it exists
+                .replace('-png', '.png') //replace only if it exists
+                .replace('-jgp', '.jpg') //replace only if it exists
+                .replace('-jpeg', '.jpeg'); //replace only if it exists
+
+              return {
+                price_data: {
+                  currency: 'brl',
+                  product_data: {
+                    name: item.name,
+                    images: [newImage]
+                  },
+                  unity_amount: item.price * 100, //because the unit amount has to be in cents
+                },
+                ajustable_quantity: {
+                  enabled: true,
+                  minmum: 1,
+                },
+                quantity: item.quantity,
+              }
+            }),
             success_url: `${req.headers.origin}/?success=true`,
             cancel_url: `${req.headers.origin}/?canceled=true`,
           }
